@@ -60,9 +60,8 @@ def set_device_status(request, device_id):
 
 # 预定义的密钥列表
 API_KEYS = [
-    "kdj_device_control_2024_key1",
-    "kdj_device_control_2024_key2", 
-    "kdj_device_control_2024_key3"
+    "api_key1",
+    "api_key2"
 ]
 
 def verify_api_key(request_data, signature, api_key):
