@@ -1,0 +1,355 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>设备详情</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background: #181c20;
+            font-family: 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: #eaeaea;
+        }
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+        .header {
+            background: #23272b;
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 1rem 1rem 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #23272b;
+        }
+        .header-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f5f5f7;
+            text-align: center;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #90caf9;
+            text-align: center;
+            margin-top: 0.3rem;
+        }
+        .content {
+            padding: 1rem 0.5rem;
+        }
+        .status-card {
+            background: #23272b;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+            border: 1px solid #23272b;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .status-item {
+            text-align: center;
+            padding: 0.8rem 0.5rem;
+            background: #181c20;
+            border-radius: 0.6rem;
+            border: 1px solid #23272b;
+            color: #b0bec5;
+        }
+        .status-label {
+            font-size: 0.7rem;
+            color: #90caf9;
+            margin-bottom: 0.3rem;
+        }
+        .status-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .online-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            padding: 1rem;
+            background: #23272b;
+            border-radius: 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #43e97b;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .status-dot-online {
+            background: linear-gradient(145deg, #43e97b 60%, #38f9d7 100%);
+        }
+        .status-dot-offline {
+            background: linear-gradient(145deg, #ffbcbc 60%, #ff4d4f 100%);
+        }
+        .switch-section {
+            background: #23272b;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+            border: 1px solid #23272b;
+        }
+        .switch-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f5f5f7;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .switch-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+        .switch-btn {
+            border: none;
+            border-radius: 0.8rem;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            background: #181c20;
+            color: #b0bec5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        .switch-btn-on {
+            background: linear-gradient(135deg, #1e88e5 0%, #1976d2 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.18);
+        }
+        .switch-btn-off {
+            background: #23272b;
+            color: #b0bec5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        .switch-btn:active {
+            transform: scale(0.97);
+        }
+        .switch-icon {
+            font-size: 1.5rem;
+        }
+        .switch-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .switch-status {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+        .back-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #23272b;
+            color: #90caf9;
+            border: none;
+            border-radius: 50%;
+            width: 3.5rem;
+            height: 3.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .back-btn:active {
+            transform: scale(0.93);
+        }
+        .logout-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #23272b;
+            color: #90caf9;
+            border: none;
+            border-radius: 50%;
+            width: 3.5rem;
+            height: 3.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .logout-btn:active {
+            transform: scale(0.93);
+        }
+        @media (max-width: 480px) {
+            .status-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .switch-grid {
+                grid-template-columns: 1fr;
+            }
+            .switch-btn {
+                min-height: 70px;
+            }
+            .content { padding: 0.5rem 0.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <h1 class="header-title">设备详情</h1>
+        <div class="header-subtitle">{{ device.id }}</div>
+    </div>
+    
+    <div class="content">
+        <div class="status-card">
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-label">电流</div>
+                    <div class="status-value" v-text="I + ' mA'"></div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">电压</div>
+                    <div class="status-value" v-text="V + ' V'"></div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">功率</div>
+                    <div class="status-value" v-text="P + ' W'"></div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">累计用电量</div>
+                    <div class="status-value" v-text="total_power + ' Wh'"></div>
+                </div>
+            </div>
+            
+            <div class="online-status">
+                <span :class="online ? 'status-dot status-dot-online' : 'status-dot status-dot-offline'"></span>
+                <span v-text="online ? '在线' : '离线'" :class="online ? 'green-text text-darken-2' : 'red-text text-darken-2'"></span>
+            </div>
+        </div>
+        
+        <div class="switch-section">
+            <div class="switch-title">开关控制</div>
+            <div class="switch-grid">
+                <button
+                    :class="['switch-btn', isOn(0) ? 'switch-btn-on' : 'switch-btn-off']"
+                    @click="toggleSwitch(0)"
+                >
+                    <i class="material-icons switch-icon" v-text="isOn(0) ? 'toggle_on' : 'toggle_off'"></i>
+                    <div class="switch-name" v-text="names[0] ? names[0] : '开关3'"></div>
+                    <div class="switch-status" v-text="isOn(0) ? '已开启' : '已关闭'"></div>
+                </button>
+                
+                <button
+                    :class="['switch-btn', isOn(1) ? 'switch-btn-on' : 'switch-btn-off']"
+                    @click="toggleSwitch(1)"
+                >
+                    <i class="material-icons switch-icon" v-text="isOn(1) ? 'toggle_on' : 'toggle_off'"></i>
+                    <div class="switch-name" v-text="names[1] ? names[1] : '开关2'"></div>
+                    <div class="switch-status" v-text="isOn(1) ? '已开启' : '已关闭'"></div>
+                </button>
+                
+                <button
+                    :class="['switch-btn', isOn(2) ? 'switch-btn-on' : 'switch-btn-off']"
+                    @click="toggleSwitch(2)"
+                >
+                    <i class="material-icons switch-icon" v-text="isOn(2) ? 'toggle_on' : 'toggle_off'"></i>
+                    <div class="switch-name" v-text="names[2] ? names[2] : '开关1'"></div>
+                    <div class="switch-status" v-text="isOn(2) ? '已开启' : '已关闭'"></div>
+                </button>
+                
+                <button
+                    :class="['switch-btn', isOn(3) ? 'switch-btn-on' : 'switch-btn-off']"
+                    @click="toggleSwitch(3)"
+                >
+                    <i class="material-icons switch-icon" v-text="isOn(3) ? 'toggle_on' : 'toggle_off'"></i>
+                    <div class="switch-name">总控</div>
+                    <div class="switch-status" v-text="isOn(3) ? '已开启' : '已关闭'"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <button class="back-btn" @click="goBack">
+        <i class="material-icons">arrow_back</i>
+    </button>
+    <a href="/logout/" class="logout-btn" title="退出登录">
+        <i class="material-icons">logout</i>
+    </a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: JSON.parse('{{ vue_data|escapejs }}'),
+        computed: {
+            statusArr() {
+                return this.statusToArr(this.status);
+            }
+        },
+        methods: {
+            statusToArr(status) {
+                let s = String(status || '').replace(/[^0-9]/g, '');
+                if (s.length > 4) s = s.slice(-4);
+                s = s.padStart(4, '0');
+                return [s[0], s[1], s[2], s[3]];
+            },
+            arrToStatus(arr) {
+                return arr.join('');
+            },
+            isOn(idx) {
+                let arr = this.statusToArr(this.status);
+                return arr[idx] === '1';
+            },
+            toggleSwitch(idx) {
+                let arr = this.statusToArr(this.status);
+                arr[idx] = arr[idx] === '1' ? '0' : '1';
+                let newStatus = this.arrToStatus(arr);
+                fetch("/device/{{ device.id }}/set_status/", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body: "status=" + newStatus
+                }).then(r => r.json()).then(data => {
+                    if(data.result === 'ok') {
+                        this.status = newStatus;
+                    }
+                });
+            },
+            goBack() {
+                window.location.href = '/';
+            }
+        }
+    })
+</script>
+</body>
+</html> 
